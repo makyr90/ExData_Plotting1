@@ -1,0 +1,15 @@
+mydata<-read.table("household_power_consumption.txt",header= TRUE,sep=';')
+mydata$Date<-as.Date(mydata$Date,format ="%d/%m/%Y")
+mydata2<-subset(mydata,Date =="2007-02-01" | Date =="2007-02-02" )
+mydata2$DateTime<-as.POSIXct(paste(mydata2$Date, mydata2$Time), format="%Y-%m-%d %H:%M:%S")
+mydata2$Sub_metering_1<-as.numeric(as.character(mydata2$Sub_metering_1))
+mydata2$Sub_metering_2<-as.numeric(as.character(mydata2$Sub_metering_2))
+mydata2$Sub_metering_3<-as.numeric(as.character(mydata2$Sub_metering_3))
+png("plot3.png")
+with(mydata2, plot(DateTime, Sub_metering_1,type = "l",ylab="Energy sub metering", xlab = ""))
+with(mydata2, points(DateTime, Sub_metering_2,type = "l",col ="red"))
+with(mydata2, points(DateTime, Sub_metering_3,type = "l",col ="blue"))
+legend("topright", 
+       legend=c("Sub_metering_1","Sub_metering_2","Sub_metering_3"),
+        col=c("black","red","blue"), lty=c(1,1,1))
+dev.off()
